@@ -22,7 +22,7 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-// Auto-generated OpenCL 1.1 C++11 RAII classes based on RAIIGen V0.2.4 (https://github.com/Unarmed1000)
+// Auto-generated OpenCL 1.1 C++11 RAII classes based on RAIIGen V0.2.5 (https://github.com/Unarmed1000)
 
 #include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
@@ -127,6 +127,7 @@ namespace RapidOpenCL
       m_context = context;
     }    
     
+    //! @brief Destroys any owned resources and then creates the requested one
     void Reset(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
@@ -144,6 +145,7 @@ namespace RapidOpenCL
       m_context = context;
     }
 
+    //! @brief Destroys any owned resources and then creates the requested one
     void Reset(const cl_context_properties * pContextProperties, const cl_device_type deviceType, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
