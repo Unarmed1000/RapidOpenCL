@@ -24,7 +24,6 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
-#include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -52,7 +51,7 @@ namespace RapidOpenCL
         m_mem = other.m_mem;
 
         // Remove the data from other
-        other.m_mem = RapidValues::INVALID_MEM;
+        other.m_mem = nullptr;
       }
       return *this;
     }
@@ -62,12 +61,12 @@ namespace RapidOpenCL
       : m_mem(other.m_mem)
     {
       // Remove the data from other
-      other.m_mem = RapidValues::INVALID_MEM;
+      other.m_mem = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
     Image()
-      : m_mem(RapidValues::INVALID_MEM)
+      : m_mem(nullptr)
     {
     }
 
@@ -101,7 +100,7 @@ namespace RapidOpenCL
     cl_mem Release()
     {
       const auto resource = m_mem;
-      m_mem = RapidValues::INVALID_MEM;
+      m_mem = nullptr;
       return resource;
     }
 
@@ -111,10 +110,10 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_mem != RapidValues::INVALID_MEM);
+      assert(m_mem != nullptr);
 
       clReleaseMemObject(m_mem);
-      m_mem = RapidValues::INVALID_MEM;
+      m_mem = nullptr;
     }
 
     //! @brief Destroys any owned resources and assume control of the Image (this object becomes responsible for releasing it)
@@ -172,7 +171,7 @@ namespace RapidOpenCL
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_mem != RapidValues::INVALID_MEM;
+      return m_mem != nullptr;
     }
   };
 }

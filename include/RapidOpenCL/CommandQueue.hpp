@@ -24,7 +24,6 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
-#include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -52,7 +51,7 @@ namespace RapidOpenCL
         m_commandQueue = other.m_commandQueue;
 
         // Remove the data from other
-        other.m_commandQueue = RapidValues::INVALID_COMMAND_QUEUE;
+        other.m_commandQueue = nullptr;
       }
       return *this;
     }
@@ -62,12 +61,12 @@ namespace RapidOpenCL
       : m_commandQueue(other.m_commandQueue)
     {
       // Remove the data from other
-      other.m_commandQueue = RapidValues::INVALID_COMMAND_QUEUE;
+      other.m_commandQueue = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
     CommandQueue()
-      : m_commandQueue(RapidValues::INVALID_COMMAND_QUEUE)
+      : m_commandQueue(nullptr)
     {
     }
 
@@ -94,7 +93,7 @@ namespace RapidOpenCL
     cl_command_queue Release()
     {
       const auto resource = m_commandQueue;
-      m_commandQueue = RapidValues::INVALID_COMMAND_QUEUE;
+      m_commandQueue = nullptr;
       return resource;
     }
 
@@ -104,10 +103,10 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_commandQueue != RapidValues::INVALID_COMMAND_QUEUE);
+      assert(m_commandQueue != nullptr);
 
       clReleaseCommandQueue(m_commandQueue);
-      m_commandQueue = RapidValues::INVALID_COMMAND_QUEUE;
+      m_commandQueue = nullptr;
     }
 
     //! @brief Destroys any owned resources and assume control of the CommandQueue (this object becomes responsible for releasing it)
@@ -147,7 +146,7 @@ namespace RapidOpenCL
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_commandQueue != RapidValues::INVALID_COMMAND_QUEUE;
+      return m_commandQueue != nullptr;
     }
   };
 }

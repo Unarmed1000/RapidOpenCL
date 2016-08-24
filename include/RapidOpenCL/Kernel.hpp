@@ -24,7 +24,6 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
-#include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -52,7 +51,7 @@ namespace RapidOpenCL
         m_kernel = other.m_kernel;
 
         // Remove the data from other
-        other.m_kernel = RapidValues::INVALID_KERNEL;
+        other.m_kernel = nullptr;
       }
       return *this;
     }
@@ -62,12 +61,12 @@ namespace RapidOpenCL
       : m_kernel(other.m_kernel)
     {
       // Remove the data from other
-      other.m_kernel = RapidValues::INVALID_KERNEL;
+      other.m_kernel = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
     Kernel()
-      : m_kernel(RapidValues::INVALID_KERNEL)
+      : m_kernel(nullptr)
     {
     }
 
@@ -94,7 +93,7 @@ namespace RapidOpenCL
     cl_kernel Release()
     {
       const auto resource = m_kernel;
-      m_kernel = RapidValues::INVALID_KERNEL;
+      m_kernel = nullptr;
       return resource;
     }
 
@@ -104,10 +103,10 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_kernel != RapidValues::INVALID_KERNEL);
+      assert(m_kernel != nullptr);
 
       clReleaseKernel(m_kernel);
-      m_kernel = RapidValues::INVALID_KERNEL;
+      m_kernel = nullptr;
     }
 
     //! @brief Destroys any owned resources and assume control of the Kernel (this object becomes responsible for releasing it)
@@ -147,7 +146,7 @@ namespace RapidOpenCL
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_kernel != RapidValues::INVALID_KERNEL;
+      return m_kernel != nullptr;
     }
   };
 }

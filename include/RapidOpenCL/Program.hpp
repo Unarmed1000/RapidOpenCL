@@ -24,7 +24,6 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
-#include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -52,7 +51,7 @@ namespace RapidOpenCL
         m_program = other.m_program;
 
         // Remove the data from other
-        other.m_program = RapidValues::INVALID_PROGRAM;
+        other.m_program = nullptr;
       }
       return *this;
     }
@@ -62,12 +61,12 @@ namespace RapidOpenCL
       : m_program(other.m_program)
     {
       // Remove the data from other
-      other.m_program = RapidValues::INVALID_PROGRAM;
+      other.m_program = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
     Program()
-      : m_program(RapidValues::INVALID_PROGRAM)
+      : m_program(nullptr)
     {
     }
 
@@ -101,7 +100,7 @@ namespace RapidOpenCL
     cl_program Release()
     {
       const auto resource = m_program;
-      m_program = RapidValues::INVALID_PROGRAM;
+      m_program = nullptr;
       return resource;
     }
 
@@ -111,10 +110,10 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_program != RapidValues::INVALID_PROGRAM);
+      assert(m_program != nullptr);
 
       clReleaseProgram(m_program);
-      m_program = RapidValues::INVALID_PROGRAM;
+      m_program = nullptr;
     }
 
     //! @brief Destroys any owned resources and assume control of the Program (this object becomes responsible for releasing it)
@@ -172,7 +171,7 @@ namespace RapidOpenCL
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_program != RapidValues::INVALID_PROGRAM;
+      return m_program != nullptr;
     }
   };
 }

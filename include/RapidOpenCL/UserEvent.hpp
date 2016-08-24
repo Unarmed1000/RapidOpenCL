@@ -24,7 +24,6 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
-#include <RapidOpenCL/Values.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -52,7 +51,7 @@ namespace RapidOpenCL
         m_event = other.m_event;
 
         // Remove the data from other
-        other.m_event = RapidValues::INVALID_EVENT;
+        other.m_event = nullptr;
       }
       return *this;
     }
@@ -62,12 +61,12 @@ namespace RapidOpenCL
       : m_event(other.m_event)
     {
       // Remove the data from other
-      other.m_event = RapidValues::INVALID_EVENT;
+      other.m_event = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
     UserEvent()
-      : m_event(RapidValues::INVALID_EVENT)
+      : m_event(nullptr)
     {
     }
 
@@ -94,7 +93,7 @@ namespace RapidOpenCL
     cl_event Release()
     {
       const auto resource = m_event;
-      m_event = RapidValues::INVALID_EVENT;
+      m_event = nullptr;
       return resource;
     }
 
@@ -104,10 +103,10 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_event != RapidValues::INVALID_EVENT);
+      assert(m_event != nullptr);
 
       clReleaseEvent(m_event);
-      m_event = RapidValues::INVALID_EVENT;
+      m_event = nullptr;
     }
 
     //! @brief Destroys any owned resources and assume control of the UserEvent (this object becomes responsible for releasing it)
@@ -147,7 +146,7 @@ namespace RapidOpenCL
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_event != RapidValues::INVALID_EVENT;
+      return m_event != nullptr;
     }
   };
 }
