@@ -24,6 +24,7 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
+#include <RapidOpenCL/CustomTypes.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -77,15 +78,15 @@ namespace RapidOpenCL
       Reset(context);
     }
     
-      //! @brief Create the requested resource
-    Context(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
+    //! @brief Create the requested resource
+    Context(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLNotify pfnNotify, void * pUserData)
       : Context()
     {
       Reset(pContextProperties, numDevices, pDeviceId, pfnNotify, pUserData);
     }
 
-      //! @brief Create the requested resource
-    Context(const cl_context_properties * pContextProperties, const cl_device_type deviceType, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
+    //! @brief Create the requested resource
+    Context(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLNotify pfnNotify, void * pUserData)
       : Context()
     {
       Reset(pContextProperties, deviceType, pfnNotify, pUserData);
@@ -127,7 +128,7 @@ namespace RapidOpenCL
     }    
     
     //! @brief Destroys any owned resources and then creates the requested one
-    void Reset(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
+    void Reset(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLNotify pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -145,7 +146,7 @@ namespace RapidOpenCL
     }
 
     //! @brief Destroys any owned resources and then creates the requested one
-    void Reset(const cl_context_properties * pContextProperties, const cl_device_type deviceType, void (CL_CALLBACK *)(const char *, const void *, size_t, void *) pfnNotify, void * pUserData)
+    void Reset(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLNotify pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 

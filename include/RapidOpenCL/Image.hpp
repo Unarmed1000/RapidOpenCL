@@ -24,6 +24,7 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
+#include <RapidOpenCL/CustomTypes.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -77,14 +78,14 @@ namespace RapidOpenCL
       Reset(mem);
     }
     
-      //! @brief Create the requested resource
+    //! @brief Create the requested resource
     Image(const cl_context context, const cl_mem_flags memFlags, const cl_image_format& imageFormat, const size_t imageWidth, const size_t imageHeight, const size_t imageRowPitch, void * pHost)
       : Image()
     {
       Reset(context, memFlags, imageFormat, imageWidth, imageHeight, imageRowPitch, pHost);
     }
 
-      //! @brief Create the requested resource
+    //! @brief Create the requested resource
     Image(const cl_context context, const cl_mem_flags memFlags, const cl_image_format& imageFormat, const size_t imageWidth, const size_t imageHeight, const size_t imageDepth, const size_t imageRowPitch, const size_t imageSlicePitch, void * pHost)
       : Image()
     {

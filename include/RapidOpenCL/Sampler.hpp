@@ -24,6 +24,7 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
+#include <RapidOpenCL/CustomTypes.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
 #include <cassert>
@@ -77,7 +78,7 @@ namespace RapidOpenCL
       Reset(sampler);
     }
     
-      //! @brief Create the requested resource
+    //! @brief Create the requested resource
     Sampler(const cl_context context, const cl_bool normalizedCoords, const cl_addressing_mode addressingMode, const cl_filter_mode filterMode)
       : Sampler()
     {
