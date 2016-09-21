@@ -146,6 +146,12 @@ namespace RapidOpenCL
       return m_kernel;
     }
 
+    //! @brief Get a pointer to the associated resource handle
+    const cl_kernel* GetPointer() const
+    {
+      return &m_kernel;
+    }
+    
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {

@@ -146,6 +146,12 @@ namespace RapidOpenCL
       return m_commandQueue;
     }
 
+    //! @brief Get a pointer to the associated resource handle
+    const cl_command_queue* GetPointer() const
+    {
+      return &m_commandQueue;
+    }
+    
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
