@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL_CONTEXT_HPP
-#define RAPIDOPENCL_CONTEXT_HPP
+#ifndef RAPIDOPENCL1_1__CONTEXT_HPP
+#define RAPIDOPENCL1_1__CONTEXT_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -24,6 +24,7 @@
 
 // Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
 
+#include <RapidOpenCL/Config.hpp>
 #include <RapidOpenCL/CustomTypes.hpp>
 #include <RapidOpenCL/Util.hpp>
 #include <CL/cl.h>
@@ -100,7 +101,7 @@ namespace RapidOpenCL
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_context Release()
+    cl_context Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
     {
       const auto resource = m_context;
       m_context = nullptr;

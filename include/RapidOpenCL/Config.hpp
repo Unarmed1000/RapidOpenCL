@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1_VALUES_HPP
-#define RAPIDOPENCL1_1_VALUES_HPP
+#ifndef RAPIDOPENCL1_1_CONFIG_HPP
+#define RAPIDOPENCL1_1_CONFIG_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,22 +22,14 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-#include <CL/cl.h>
+#ifdef _MSC_VER
+  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+#elif defined(__GNUC__)
+  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT  __attribute__((warn_unused_result))
+#else
+  #pragma message("RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT not implemented for this compiler")
+  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+#endif
 
-namespace RapidOpenCL
-{
-  namespace Values
-  {
-    static const cl_command_queue INVALID_COMMAND_QUEUE = nullptr;
-    static const cl_context INVALID_CONTEXT = nullptr;
-    static const cl_device_id INVALID_DEVICE_ID = nullptr;
-    static const cl_event INVALID_EVENT = nullptr;
-    static const cl_kernel INVALID_KERNEL = nullptr;
-    static const cl_mem INVALID_MEM = nullptr;
-    static const cl_platform_id INVALID_PLATFORM_ID = nullptr;
-    static const cl_program INVALID_PROGRAM = nullptr;
-    static const cl_sampler INVALID_SAMPLER = nullptr;
-  };
-}
 
 #endif

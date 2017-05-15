@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL_CHECK_HPP
-#define RAPIDOPENCL_CHECK_HPP
+#ifndef RAPIDOPENCL1_1_CHECK_HPP
+#define RAPIDOPENCL1_1_CHECK_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*

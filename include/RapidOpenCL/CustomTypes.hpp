@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL_CUSTOMTYPES_HPP
-#define RAPIDOPENCL_CUSTOMTYPES_HPP
+#ifndef RAPIDOPENCL1_1_CUSTOMTYPES_HPP
+#define RAPIDOPENCL1_1_CUSTOMTYPES_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*

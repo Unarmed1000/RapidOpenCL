@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL_DEBUGSTRINGS_HPP
-#define RAPIDOPENCL_DEBUGSTRINGS_HPP
+#ifndef RAPIDOPENCL1_1_DEBUGSTRINGS_HPP
+#define RAPIDOPENCL1_1_DEBUGSTRINGS_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*

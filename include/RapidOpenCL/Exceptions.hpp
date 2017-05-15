@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL_EXCEPTIONS_HPP
-#define RAPIDOPENCL_EXCEPTIONS_HPP
+#ifndef RAPIDOPENCL1_1_EXCEPTIONS_HPP
+#define RAPIDOPENCL1_1_EXCEPTIONS_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
