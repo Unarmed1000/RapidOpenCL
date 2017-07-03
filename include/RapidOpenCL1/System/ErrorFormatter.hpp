@@ -1,9 +1,9 @@
-#ifndef RAPIDOPENCL1_1_VALUES_HPP
-#define RAPIDOPENCL1_1_VALUES_HPP
+#ifndef RAPIDOPENCL1_SYSTEM_ERRORFORMATTER_HPP
+#define RAPIDOPENCL1_SYSTEM_ERRORFORMATTER_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2017, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -22,22 +22,35 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
+#include <RapidOpenCL1/System/Macro.hpp>
+#include <string>
 #include <CL/cl.h>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  namespace Values
+  namespace ErrorFormatter
   {
-    static const cl_command_queue INVALID_COMMAND_QUEUE = nullptr;
-    static const cl_context INVALID_CONTEXT = nullptr;
-    static const cl_device_id INVALID_DEVICE_ID = nullptr;
-    static const cl_event INVALID_EVENT = nullptr;
-    static const cl_kernel INVALID_KERNEL = nullptr;
-    static const cl_mem INVALID_MEM = nullptr;
-    static const cl_platform_id INVALID_PLATFORM_ID = nullptr;
-    static const cl_program INVALID_PROGRAM = nullptr;
-    static const cl_sampler INVALID_SAMPLER = nullptr;
-  };
+#ifdef RAPIDOPENCL_ERRORFORMATTER_EXTERN
+    extern std::string Format(const std::string& message, const cl_int errorCode);
+    extern std::string Format(const std::string& message, const cl_int errorCode, const std::string& fileName, const int lineNumber);
+#else
+
+    inline std::string Format(const std::string& message, const cl_int errorCode)
+    {
+      RAPIDOPENCL_PARAM_NOT_USED(errorCode);
+      return message;
+    }
+
+    inline std::string Format(const std::string& message, const cl_int errorCode, const std::string& fileName, const int lineNumber)
+    {
+      RAPIDOPENCL_PARAM_NOT_USED(errorCode);
+      RAPIDOPENCL_PARAM_NOT_USED(fileName);
+      RAPIDOPENCL_PARAM_NOT_USED(lineNumber);
+      return message;
+    }      
+
+    #endif
+  }
 }
 
 #endif

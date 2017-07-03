@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1__PROGRAM_HPP
-#define RAPIDOPENCL1_1__PROGRAM_HPP
+#ifndef RAPIDOPENCL1_SAMPLER_HPP
+#define RAPIDOPENCL1_SAMPLER_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,26 +22,26 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-// Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
+// Auto-generated OpenCL 1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000/RAIIGen)
 
-#include <RapidOpenCL/Config.hpp>
-#include <RapidOpenCL/CustomTypes.hpp>
-#include <RapidOpenCL/Util.hpp>
+#include <RapidOpenCL1/CustomTypes.hpp>
+#include <RapidOpenCL1/CheckError.hpp>
+#include <RapidOpenCL1/System/Macro.hpp>
 #include <CL/cl.h>
 #include <cassert>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  // This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
-  class Program
+  //! This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
+  class Sampler
   {
-    cl_program m_program;
+    cl_sampler m_sampler;
   public:
-    Program(const Program&) = delete;
-    Program& operator=(const Program&) = delete;
+    Sampler(const Sampler&) = delete;
+    Sampler& operator=(const Sampler&) = delete;
 
     //! @brief Move assignment operator
-    Program& operator=(Program&& other)
+    Sampler& operator=(Sampler&& other)
     {
       if (this != &other)
       {
@@ -50,61 +50,54 @@ namespace RapidOpenCL
           Reset();
 
         // Claim ownership here
-        m_program = other.m_program;
+        m_sampler = other.m_sampler;
 
         // Remove the data from other
-        other.m_program = nullptr;
+        other.m_sampler = nullptr;
       }
       return *this;
     }
 
     //! @brief Move constructor
-    Program(Program&& other)
-      : m_program(other.m_program)
+    //! Transfer ownership from other to this
+    Sampler(Sampler&& other)
+      : m_sampler(other.m_sampler)
     {
       // Remove the data from other
-      other.m_program = nullptr;
+      other.m_sampler = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
-    Program()
-      : m_program(nullptr)
+    Sampler()
+      : m_sampler(nullptr)
     {
     }
 
-    //! @brief Assume control of the Program (this object becomes responsible for releasing it)
-    explicit Program(const cl_program program)
-      : Program()
+    //! @brief Assume control of the Sampler (this object becomes responsible for releasing it)
+    explicit Sampler(const cl_sampler sampler)
+      : Sampler()
     {
-      Reset(program);
-    }
-
-    //! @brief Create the requested resource
-    //! @note  Function: clCreateProgramWithSource
-    Program(const cl_context context, const cl_uint count, const char ** ppStrings, const size_t * pLengths)
-      : Program()
-    {
-      Reset(context, count, ppStrings, pLengths);
+      Reset(sampler);
     }
 
     //! @brief Create the requested resource
-    //! @note  Function: clCreateProgramWithBinary
-    Program(const cl_context context, const cl_uint numDevices, const cl_device_id * pDeviceId, const size_t * lengths, const unsigned char ** ppBinaries, cl_int * pBinaryStatus)
-      : Program()
+    //! @note  Function: clCreateSampler
+    Sampler(const cl_context context, const cl_bool normalizedCoords, const cl_addressing_mode addressingMode, const cl_filter_mode filterMode)
+      : Sampler()
     {
-      Reset(context, numDevices, pDeviceId, lengths, ppBinaries, pBinaryStatus);
+      Reset(context, normalizedCoords, addressingMode, filterMode);
     }
 
-    ~Program()
+    ~Sampler()
     {
       Reset();
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_program Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    cl_sampler Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
     {
-      const auto resource = m_program;
-      m_program = nullptr;
+      const auto resource = m_sampler;
+      m_sampler = nullptr;
       return resource;
     }
 
@@ -114,25 +107,25 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_program != nullptr);
+      assert(m_sampler != nullptr);
 
-      clReleaseProgram(m_program);
-      m_program = nullptr;
+      clReleaseSampler(m_sampler);
+      m_sampler = nullptr;
     }
 
-    //! @brief Destroys any owned resources and assume control of the Program (this object becomes responsible for releasing it)
-    void Reset(const cl_program program)
+    //! @brief Destroys any owned resources and assume control of the Sampler (this object becomes responsible for releasing it)
+    void Reset(const cl_sampler sampler)
     {
       if (IsValid())
         Reset();
 
 
-      m_program = program;
+      m_sampler = sampler;
     }
 
     //! @brief Destroys any owned resources and then creates the requested one
-    //! @note  Function: clCreateProgramWithSource
-    void Reset(const cl_context context, const cl_uint count, const char ** ppStrings, const size_t * pLengths)
+    //! @note  Function: clCreateSampler
+    void Reset(const cl_context context, const cl_bool normalizedCoords, const cl_addressing_mode addressingMode, const cl_filter_mode filterMode)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -142,51 +135,43 @@ namespace RapidOpenCL
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;
-      const cl_program program = clCreateProgramWithSource(context, count, ppStrings, pLengths, &errorCode);
-      Util::Check(errorCode, "clCreateProgramWithSource", __FILE__, __LINE__);
+      const cl_sampler sampler = clCreateSampler(context, normalizedCoords, addressingMode, filterMode, &errorCode);
+      CheckError(errorCode, "clCreateSampler", __FILE__, __LINE__);
 
       // Everything is ready, so assign the members
-      m_program = program;
-    }
-
-    //! @brief Destroys any owned resources and then creates the requested one
-    //! @note  Function: clCreateProgramWithBinary
-    void Reset(const cl_context context, const cl_uint numDevices, const cl_device_id * pDeviceId, const size_t * lengths, const unsigned char ** ppBinaries, cl_int * pBinaryStatus)
-    {
-      // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
-
-      // Free any currently allocated resource
-      if (IsValid())
-        Reset();
-
-      // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
-      cl_int errorCode;
-      const cl_program program = clCreateProgramWithBinary(context, numDevices, pDeviceId, lengths, ppBinaries, pBinaryStatus, &errorCode);
-      Util::Check(errorCode, "clCreateProgramWithBinary", __FILE__, __LINE__);
-
-      // Everything is ready, so assign the members
-      m_program = program;
+      m_sampler = sampler;
     }
 
     //! @brief Get the associated resource handle
-    cl_program Get() const
+    cl_sampler Get() const
     {
-      return m_program;
+      return m_sampler;
     }
 
     //! @brief Get a pointer to the associated resource handle
-    const cl_program* GetPointer() const
+    const cl_sampler* GetPointer() const
     {
-      return &m_program;
+      return &m_sampler;
     }
-    
+
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_program != nullptr;
+      return m_sampler != nullptr;
+    }
+
+    //! @note  Function: clRetainSampler
+    cl_int RetainSampler()
+    {
+      return clRetainSampler(m_sampler);
+    }
+
+    //! @note  Function: clGetSamplerInfo
+    cl_int GetSamplerInfo(const cl_sampler_info samplerInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetSamplerInfo(m_sampler, samplerInfo, size, pVoid, pSize);
     }
   };
 }
-
 
 #endif

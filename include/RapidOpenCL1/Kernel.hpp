@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1__COMMANDQUEUE_HPP
-#define RAPIDOPENCL1_1__COMMANDQUEUE_HPP
+#ifndef RAPIDOPENCL1_KERNEL_HPP
+#define RAPIDOPENCL1_KERNEL_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,26 +22,26 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-// Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
+// Auto-generated OpenCL 1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000/RAIIGen)
 
-#include <RapidOpenCL/Config.hpp>
-#include <RapidOpenCL/CustomTypes.hpp>
-#include <RapidOpenCL/Util.hpp>
+#include <RapidOpenCL1/CustomTypes.hpp>
+#include <RapidOpenCL1/CheckError.hpp>
+#include <RapidOpenCL1/System/Macro.hpp>
 #include <CL/cl.h>
 #include <cassert>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  // This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
-  class CommandQueue
+  //! This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
+  class Kernel
   {
-    cl_command_queue m_commandQueue;
+    cl_kernel m_kernel;
   public:
-    CommandQueue(const CommandQueue&) = delete;
-    CommandQueue& operator=(const CommandQueue&) = delete;
+    Kernel(const Kernel&) = delete;
+    Kernel& operator=(const Kernel&) = delete;
 
     //! @brief Move assignment operator
-    CommandQueue& operator=(CommandQueue&& other)
+    Kernel& operator=(Kernel&& other)
     {
       if (this != &other)
       {
@@ -50,53 +50,54 @@ namespace RapidOpenCL
           Reset();
 
         // Claim ownership here
-        m_commandQueue = other.m_commandQueue;
+        m_kernel = other.m_kernel;
 
         // Remove the data from other
-        other.m_commandQueue = nullptr;
+        other.m_kernel = nullptr;
       }
       return *this;
     }
 
     //! @brief Move constructor
-    CommandQueue(CommandQueue&& other)
-      : m_commandQueue(other.m_commandQueue)
+    //! Transfer ownership from other to this
+    Kernel(Kernel&& other)
+      : m_kernel(other.m_kernel)
     {
       // Remove the data from other
-      other.m_commandQueue = nullptr;
+      other.m_kernel = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
-    CommandQueue()
-      : m_commandQueue(nullptr)
+    Kernel()
+      : m_kernel(nullptr)
     {
     }
 
-    //! @brief Assume control of the CommandQueue (this object becomes responsible for releasing it)
-    explicit CommandQueue(const cl_command_queue commandQueue)
-      : CommandQueue()
+    //! @brief Assume control of the Kernel (this object becomes responsible for releasing it)
+    explicit Kernel(const cl_kernel kernel)
+      : Kernel()
     {
-      Reset(commandQueue);
+      Reset(kernel);
     }
 
     //! @brief Create the requested resource
-    //! @note  Function: clCreateCommandQueue
-    CommandQueue(const cl_context context, const cl_device_id deviceId, const cl_command_queue_properties commandQueueProperties)
-      : CommandQueue()
+    //! @note  Function: clCreateKernel
+    Kernel(const cl_program program, const char * pszKernelName)
+      : Kernel()
     {
-      Reset(context, deviceId, commandQueueProperties);
+      Reset(program, pszKernelName);
     }
 
-    ~CommandQueue()
+    ~Kernel()
     {
       Reset();
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_command_queue Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    cl_kernel Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
     {
-      const auto resource = m_commandQueue;
-      m_commandQueue = nullptr;
+      const auto resource = m_kernel;
+      m_kernel = nullptr;
       return resource;
     }
 
@@ -106,25 +107,25 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_commandQueue != nullptr);
+      assert(m_kernel != nullptr);
 
-      clReleaseCommandQueue(m_commandQueue);
-      m_commandQueue = nullptr;
+      clReleaseKernel(m_kernel);
+      m_kernel = nullptr;
     }
 
-    //! @brief Destroys any owned resources and assume control of the CommandQueue (this object becomes responsible for releasing it)
-    void Reset(const cl_command_queue commandQueue)
+    //! @brief Destroys any owned resources and assume control of the Kernel (this object becomes responsible for releasing it)
+    void Reset(const cl_kernel kernel)
     {
       if (IsValid())
         Reset();
 
 
-      m_commandQueue = commandQueue;
+      m_kernel = kernel;
     }
 
     //! @brief Destroys any owned resources and then creates the requested one
-    //! @note  Function: clCreateCommandQueue
-    void Reset(const cl_context context, const cl_device_id deviceId, const cl_command_queue_properties commandQueueProperties)
+    //! @note  Function: clCreateKernel
+    void Reset(const cl_program program, const char * pszKernelName)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -134,32 +135,64 @@ namespace RapidOpenCL
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;
-      const cl_command_queue commandQueue = clCreateCommandQueue(context, deviceId, commandQueueProperties, &errorCode);
-      Util::Check(errorCode, "clCreateCommandQueue", __FILE__, __LINE__);
+      const cl_kernel kernel = clCreateKernel(program, pszKernelName, &errorCode);
+      CheckError(errorCode, "clCreateKernel", __FILE__, __LINE__);
 
       // Everything is ready, so assign the members
-      m_commandQueue = commandQueue;
+      m_kernel = kernel;
     }
 
     //! @brief Get the associated resource handle
-    cl_command_queue Get() const
+    cl_kernel Get() const
     {
-      return m_commandQueue;
+      return m_kernel;
     }
 
     //! @brief Get a pointer to the associated resource handle
-    const cl_command_queue* GetPointer() const
+    const cl_kernel* GetPointer() const
     {
-      return &m_commandQueue;
+      return &m_kernel;
     }
-    
+
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_commandQueue != nullptr;
+      return m_kernel != nullptr;
+    }
+
+    //! @note  Function: clRetainKernel
+    cl_int RetainKernel()
+    {
+      return clRetainKernel(m_kernel);
+    }
+
+    //! @note  Function: clSetKernelArg
+    cl_int SetKernelArg(const cl_uint uint, const size_t size, const void * pVoid)
+    {
+      return clSetKernelArg(m_kernel, uint, size, pVoid);
+    }
+
+    //! @note  Function: clGetKernelInfo
+    cl_int GetKernelInfo(const cl_kernel_info kernelInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetKernelInfo(m_kernel, kernelInfo, size, pVoid, pSize);
+    }
+
+
+#if CL_VERSION_1_2
+    //! @note  Function: clGetKernelArgInfo
+    cl_int GetKernelArgInfo(const cl_uint uint, const cl_kernel_arg_info kernelArgInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetKernelArgInfo(m_kernel, uint, kernelArgInfo, size, pVoid, pSize);
+    }
+#endif
+
+    //! @note  Function: clGetKernelWorkGroupInfo
+    cl_int GetKernelWorkGroupInfo(const cl_device_id deviceId, const cl_kernel_work_group_info kernelWorkGroupInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetKernelWorkGroupInfo(m_kernel, deviceId, kernelWorkGroupInfo, size, pVoid, pSize);
     }
   };
 }
-
 
 #endif

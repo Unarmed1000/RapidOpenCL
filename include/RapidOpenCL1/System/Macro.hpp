@@ -1,9 +1,9 @@
-#ifndef RAPIDOPENCL1_1_CUSTOMTYPES_HPP
-#define RAPIDOPENCL1_1_CUSTOMTYPES_HPP
+#ifndef RAPIDOPENCL1_SYSTEM_MACRO_HPP
+#define RAPIDOPENCL1_SYSTEM_MACRO_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2017, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -22,12 +22,42 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-#include <CL/cl.h>
+#define RAPIDOPENCL_PARAM_NOT_USED(pARAM)    ((void)(pARAM))
 
-namespace RapidOpenCL
-{
-  // Define some function pointer typedefs which OpenCL failed to do
-  typedef void (CL_CALLBACK *FNOpenCLNotify)(const char *, const void *, size_t, void *);
-}
+
+#ifdef FSL_DEMOFRAMEWORK
+
+// Use the FslBase implementation
+#include <FslBase/Attributes.hpp>
+#define RAPIDOPENCL_ATTR_DEPRECATED                            FSL_ATTR_DEPRECATED
+#define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT            FSL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+
+#else
+
+  #ifdef __GNUC__
+
+    // GCC
+    #if __cplusplus > 201103 // Check if its C++14
+      #define RAPIDOPENCL_ATTR_DEPRECATED                        [[deprecated]]
+    #else
+      #define RAPIDOPENCL_ATTR_DEPRECATED
+    #endif
+    #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT          __attribute__((warn_unused_result))
+
+  #elif defined(_MSC_VER)
+
+    // Visual studio
+    #define RAPIDOPENCL_ATTR_DEPRECATED                          __declspec(deprecated)
+    #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+
+  #else
+
+    #pragma message("WARNING: RAPIDOPENCL_ATTR_DEPRECATED, RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT not implemented for this compiler")
+    #define RAPIDOPENCL_ATTR_DEPRECATED
+    #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+  
+  #endif
+
+#endif
 
 #endif

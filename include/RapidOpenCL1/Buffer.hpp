@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1__USEREVENT_HPP
-#define RAPIDOPENCL1_1__USEREVENT_HPP
+#ifndef RAPIDOPENCL1_BUFFER_HPP
+#define RAPIDOPENCL1_BUFFER_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,26 +22,26 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-// Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
+// Auto-generated OpenCL 1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000/RAIIGen)
 
-#include <RapidOpenCL/Config.hpp>
-#include <RapidOpenCL/CustomTypes.hpp>
-#include <RapidOpenCL/Util.hpp>
+#include <RapidOpenCL1/CustomTypes.hpp>
+#include <RapidOpenCL1/CheckError.hpp>
+#include <RapidOpenCL1/System/Macro.hpp>
 #include <CL/cl.h>
 #include <cassert>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  // This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
-  class UserEvent
+  //! This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
+  class Buffer
   {
-    cl_event m_event;
+    cl_mem m_mem;
   public:
-    UserEvent(const UserEvent&) = delete;
-    UserEvent& operator=(const UserEvent&) = delete;
+    Buffer(const Buffer&) = delete;
+    Buffer& operator=(const Buffer&) = delete;
 
     //! @brief Move assignment operator
-    UserEvent& operator=(UserEvent&& other)
+    Buffer& operator=(Buffer&& other)
     {
       if (this != &other)
       {
@@ -50,53 +50,54 @@ namespace RapidOpenCL
           Reset();
 
         // Claim ownership here
-        m_event = other.m_event;
+        m_mem = other.m_mem;
 
         // Remove the data from other
-        other.m_event = nullptr;
+        other.m_mem = nullptr;
       }
       return *this;
     }
 
     //! @brief Move constructor
-    UserEvent(UserEvent&& other)
-      : m_event(other.m_event)
+    //! Transfer ownership from other to this
+    Buffer(Buffer&& other)
+      : m_mem(other.m_mem)
     {
       // Remove the data from other
-      other.m_event = nullptr;
+      other.m_mem = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
-    UserEvent()
-      : m_event(nullptr)
+    Buffer()
+      : m_mem(nullptr)
     {
     }
 
-    //! @brief Assume control of the UserEvent (this object becomes responsible for releasing it)
-    explicit UserEvent(const cl_event event)
-      : UserEvent()
+    //! @brief Assume control of the Buffer (this object becomes responsible for releasing it)
+    explicit Buffer(const cl_mem mem)
+      : Buffer()
     {
-      Reset(event);
+      Reset(mem);
     }
 
     //! @brief Create the requested resource
-    //! @note  Function: clCreateUserEvent
-    UserEvent(const cl_context context)
-      : UserEvent()
+    //! @note  Function: clCreateBuffer
+    Buffer(const cl_context context, const cl_mem_flags memFlags, const size_t size, void * pHost)
+      : Buffer()
     {
-      Reset(context);
+      Reset(context, memFlags, size, pHost);
     }
 
-    ~UserEvent()
+    ~Buffer()
     {
       Reset();
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_event Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    cl_mem Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
     {
-      const auto resource = m_event;
-      m_event = nullptr;
+      const auto resource = m_mem;
+      m_mem = nullptr;
       return resource;
     }
 
@@ -106,25 +107,25 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_event != nullptr);
+      assert(m_mem != nullptr);
 
-      clReleaseEvent(m_event);
-      m_event = nullptr;
+      clReleaseMemObject(m_mem);
+      m_mem = nullptr;
     }
 
-    //! @brief Destroys any owned resources and assume control of the UserEvent (this object becomes responsible for releasing it)
-    void Reset(const cl_event event)
+    //! @brief Destroys any owned resources and assume control of the Buffer (this object becomes responsible for releasing it)
+    void Reset(const cl_mem mem)
     {
       if (IsValid())
         Reset();
 
 
-      m_event = event;
+      m_mem = mem;
     }
 
     //! @brief Destroys any owned resources and then creates the requested one
-    //! @note  Function: clCreateUserEvent
-    void Reset(const cl_context context)
+    //! @note  Function: clCreateBuffer
+    void Reset(const cl_context context, const cl_mem_flags memFlags, const size_t size, void * pHost)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -134,32 +135,49 @@ namespace RapidOpenCL
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;
-      const cl_event event = clCreateUserEvent(context, &errorCode);
-      Util::Check(errorCode, "clCreateUserEvent", __FILE__, __LINE__);
+      const cl_mem mem = clCreateBuffer(context, memFlags, size, pHost, &errorCode);
+      CheckError(errorCode, "clCreateBuffer", __FILE__, __LINE__);
 
       // Everything is ready, so assign the members
-      m_event = event;
+      m_mem = mem;
     }
 
     //! @brief Get the associated resource handle
-    cl_event Get() const
+    cl_mem Get() const
     {
-      return m_event;
+      return m_mem;
     }
 
     //! @brief Get a pointer to the associated resource handle
-    const cl_event* GetPointer() const
+    const cl_mem* GetPointer() const
     {
-      return &m_event;
+      return &m_mem;
     }
-    
+
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_event != nullptr;
+      return m_mem != nullptr;
+    }
+
+    //! @note  Function: clRetainMemObject
+    cl_int RetainMemObject()
+    {
+      return clRetainMemObject(m_mem);
+    }
+
+    //! @note  Function: clGetMemObjectInfo
+    cl_int GetMemObjectInfo(const cl_mem_info memInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetMemObjectInfo(m_mem, memInfo, size, pVoid, pSize);
+    }
+
+    //! @note  Function: clGetImageInfo
+    cl_int GetImageInfo(const cl_image_info imageInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetImageInfo(m_mem, imageInfo, size, pVoid, pSize);
     }
   };
 }
-
 
 #endif

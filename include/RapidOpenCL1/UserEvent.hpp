@@ -1,5 +1,6 @@
-#ifndef RAPIDOPENCL1_1__KERNEL_HPP
-#define RAPIDOPENCL1_1__KERNEL_HPP
+#ifndef RAPIDOPENCL1_USEREVENT_HPP
+#define RAPIDOPENCL1_USEREVENT_HPP
+#if CL_VERSION_1_1
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,26 +23,26 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-// Auto-generated OpenCL 1.1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000)
+// Auto-generated OpenCL 1 C++11 RAII classes by RAIIGen (https://github.com/Unarmed1000/RAIIGen)
 
-#include <RapidOpenCL/Config.hpp>
-#include <RapidOpenCL/CustomTypes.hpp>
-#include <RapidOpenCL/Util.hpp>
+#include <RapidOpenCL1/CustomTypes.hpp>
+#include <RapidOpenCL1/CheckError.hpp>
+#include <RapidOpenCL1/System/Macro.hpp>
 #include <CL/cl.h>
 #include <cassert>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  // This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
-  class Kernel
+  //! This object is movable so it can be thought of as behaving in the same was as a unique_ptr and is compatible with std containers
+  class UserEvent
   {
-    cl_kernel m_kernel;
+    cl_event m_event;
   public:
-    Kernel(const Kernel&) = delete;
-    Kernel& operator=(const Kernel&) = delete;
+    UserEvent(const UserEvent&) = delete;
+    UserEvent& operator=(const UserEvent&) = delete;
 
     //! @brief Move assignment operator
-    Kernel& operator=(Kernel&& other)
+    UserEvent& operator=(UserEvent&& other)
     {
       if (this != &other)
       {
@@ -50,53 +51,54 @@ namespace RapidOpenCL
           Reset();
 
         // Claim ownership here
-        m_kernel = other.m_kernel;
+        m_event = other.m_event;
 
         // Remove the data from other
-        other.m_kernel = nullptr;
+        other.m_event = nullptr;
       }
       return *this;
     }
 
     //! @brief Move constructor
-    Kernel(Kernel&& other)
-      : m_kernel(other.m_kernel)
+    //! Transfer ownership from other to this
+    UserEvent(UserEvent&& other)
+      : m_event(other.m_event)
     {
       // Remove the data from other
-      other.m_kernel = nullptr;
+      other.m_event = nullptr;
     }
 
     //! @brief Create a 'invalid' instance (use Reset to populate it)
-    Kernel()
-      : m_kernel(nullptr)
+    UserEvent()
+      : m_event(nullptr)
     {
     }
 
-    //! @brief Assume control of the Kernel (this object becomes responsible for releasing it)
-    explicit Kernel(const cl_kernel kernel)
-      : Kernel()
+    //! @brief Assume control of the UserEvent (this object becomes responsible for releasing it)
+    explicit UserEvent(const cl_event event)
+      : UserEvent()
     {
-      Reset(kernel);
+      Reset(event);
     }
 
     //! @brief Create the requested resource
-    //! @note  Function: clCreateKernel
-    Kernel(const cl_program program, const char * pszKernelName)
-      : Kernel()
+    //! @note  Function: clCreateUserEvent
+    UserEvent(const cl_context context)
+      : UserEvent()
     {
-      Reset(program, pszKernelName);
+      Reset(context);
     }
 
-    ~Kernel()
+    ~UserEvent()
     {
       Reset();
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_kernel Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    cl_event Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
     {
-      const auto resource = m_kernel;
-      m_kernel = nullptr;
+      const auto resource = m_event;
+      m_event = nullptr;
       return resource;
     }
 
@@ -106,25 +108,25 @@ namespace RapidOpenCL
       if (! IsValid())
         return;
 
-      assert(m_kernel != nullptr);
+      assert(m_event != nullptr);
 
-      clReleaseKernel(m_kernel);
-      m_kernel = nullptr;
+      clReleaseEvent(m_event);
+      m_event = nullptr;
     }
 
-    //! @brief Destroys any owned resources and assume control of the Kernel (this object becomes responsible for releasing it)
-    void Reset(const cl_kernel kernel)
+    //! @brief Destroys any owned resources and assume control of the UserEvent (this object becomes responsible for releasing it)
+    void Reset(const cl_event event)
     {
       if (IsValid())
         Reset();
 
 
-      m_kernel = kernel;
+      m_event = event;
     }
 
     //! @brief Destroys any owned resources and then creates the requested one
-    //! @note  Function: clCreateKernel
-    void Reset(const cl_program program, const char * pszKernelName)
+    //! @note  Function: clCreateUserEvent
+    void Reset(const cl_context context)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -134,32 +136,60 @@ namespace RapidOpenCL
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;
-      const cl_kernel kernel = clCreateKernel(program, pszKernelName, &errorCode);
-      Util::Check(errorCode, "clCreateKernel", __FILE__, __LINE__);
+      const cl_event event = clCreateUserEvent(context, &errorCode);
+      CheckError(errorCode, "clCreateUserEvent", __FILE__, __LINE__);
 
       // Everything is ready, so assign the members
-      m_kernel = kernel;
+      m_event = event;
     }
 
     //! @brief Get the associated resource handle
-    cl_kernel Get() const
+    cl_event Get() const
     {
-      return m_kernel;
+      return m_event;
     }
 
     //! @brief Get a pointer to the associated resource handle
-    const cl_kernel* GetPointer() const
+    const cl_event* GetPointer() const
     {
-      return &m_kernel;
+      return &m_event;
     }
-    
+
     //! @brief Check if this object contains a valid resource
     inline bool IsValid() const
     {
-      return m_kernel != nullptr;
+      return m_event != nullptr;
+    }
+
+    //! @note  Function: clGetEventInfo
+    cl_int GetEventInfo(const cl_event_info eventInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetEventInfo(m_event, eventInfo, size, pVoid, pSize);
+    }
+
+    //! @note  Function: clRetainEvent
+    cl_int RetainEvent()
+    {
+      return clRetainEvent(m_event);
+    }
+
+
+#if CL_VERSION_1_1
+    //! @note  Function: clSetUserEventStatus
+    cl_int SetUserEventStatus(const cl_int value)
+    {
+      return clSetUserEventStatus(m_event, value);
+    }
+#endif
+
+
+    //! @note  Function: clGetEventProfilingInfo
+    cl_int GetEventProfilingInfo(const cl_profiling_info profilingInfo, const size_t size, void * pVoid, size_t * pSize)
+    {
+      return clGetEventProfilingInfo(m_event, profilingInfo, size, pVoid, pSize);
     }
   };
 }
 
-
+#endif
 #endif

@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1_CONFIG_HPP
-#define RAPIDOPENCL1_1_CONFIG_HPP
+#ifndef RAPIDOPENCL1_EXCEPTIONS_HPP
+#define RAPIDOPENCL1_EXCEPTIONS_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -22,14 +22,67 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-#ifdef _MSC_VER
-  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
-#elif defined(__GNUC__)
-  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT  __attribute__((warn_unused_result))
-#else
-  #pragma message("RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT not implemented for this compiler")
-  #define RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
-#endif
+#include <stdexcept>
+#include <string>
+#include <CL/cl.h>
 
+namespace RapidOpenCL1
+{
+  class OpenCLException : public std::runtime_error
+  {
+    std::string m_fileName;
+    int m_lineNumber;
+  public:
+    explicit OpenCLException(const std::string& whatArg)
+      : std::runtime_error(whatArg)
+      , m_fileName()
+      , m_lineNumber(0)
+    {
+    }
+
+    explicit OpenCLException(const std::string& whatArg, const std::string& fileName, const int lineNumber)
+      : std::runtime_error(whatArg)
+      , m_fileName(fileName)
+      , m_lineNumber(lineNumber)
+    {
+    }
+
+
+    std::string GetFileName() const
+    {
+      return m_fileName;
+    }
+
+
+    int GetLineNumber() const
+    {
+      return m_lineNumber;
+    }
+  };
+
+
+
+  class OpenCLErrorException : public OpenCLException
+  {
+    cl_int m_errorCode;
+  public:
+    explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode)
+      : OpenCLException(whatArg)
+      , m_errorCode(errorCode)
+    {
+    }
+
+    explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode, const std::string& fileName, const int lineNumber)
+      : OpenCLException(whatArg, fileName, lineNumber)
+      , m_errorCode(errorCode)
+    {
+    }
+
+    cl_int GetErrorCode() const
+    {
+      return m_errorCode;
+    }
+  };
+}
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef RAPIDOPENCL1_1_DEBUGSTRINGS_HPP
-#define RAPIDOPENCL1_1_DEBUGSTRINGS_HPP
+#ifndef RAPIDOPENCL1_VALUES_HPP
+#define RAPIDOPENCL1_VALUES_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -24,19 +24,20 @@
 
 #include <CL/cl.h>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
-  //! Extend the debug namespace with 'convenience' methods.
-  //! This file adds conversion methods that helps transform various things to a nice string representation.
-  //! WARNING: this requires you to compile the CPP file.
-  namespace Debug
+  namespace Values
   {
-    //! @brief Convert the error code to a string
-    extern const char* ErrorCodeToString(const cl_int errorCode);
-
-    //! @brief Convert the device type to a string
-    extern const char* DeviceTypeTostring(const cl_device_type deviceType);
-  }
+    static const cl_command_queue INVALID_COMMAND_QUEUE = nullptr;
+    static const cl_context INVALID_CONTEXT = nullptr;
+    static const cl_device_id INVALID_DEVICE_ID = nullptr;
+    static const cl_event INVALID_EVENT = nullptr;
+    static const cl_kernel INVALID_KERNEL = nullptr;
+    static const cl_mem INVALID_MEM = nullptr;
+    static const cl_platform_id INVALID_PLATFORM_ID = nullptr;
+    static const cl_program INVALID_PROGRAM = nullptr;
+    static const cl_sampler INVALID_SAMPLER = nullptr;
+  };
 }
 
 #endif

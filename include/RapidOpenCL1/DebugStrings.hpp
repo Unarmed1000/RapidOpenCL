@@ -1,3 +1,5 @@
+#ifndef RAPIDOPENCL1_DEBUGSTRINGS_HPP
+#define RAPIDOPENCL1_DEBUGSTRINGS_HPP
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
@@ -20,13 +22,17 @@
 //* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //***************************************************************************************************************************************************
 
-#include <RapidOpenCL/DebugStrings.hpp>
+#include <CL/cl.h>
 
-namespace RapidOpenCL
+namespace RapidOpenCL1
 {
+  //! Extend the debug namespace with 'convenience' methods.
+  //! This file adds conversion methods that helps transform various things to a nice string representation.
+  //! WARNING: this requires you to compile the CPP file.
   namespace Debug
   {
-    const char* ErrorCodeToString(const cl_int errorCode)
+    //! @brief Convert the error code to a string
+    inline const char* ErrorCodeToString(const cl_int errorCode)
     {
       switch (errorCode)
       {
@@ -169,28 +175,38 @@ namespace RapidOpenCL
       default:
         return "Unknown";
       }
-    }
+    }    
 
-
-    const char* DeviceTypeTostring(const cl_device_type deviceType)
+    //! @brief Convert the device type to a string
+    inline const char* DeviceTypeTostring(const cl_device_type deviceType)
     {
       switch (deviceType)
       {
+#ifdef CL_DEVICE_TYPE_CPU
       case CL_DEVICE_TYPE_CPU:
         return "CL_DEVICE_TYPE_CPU";
+#endif
+#ifdef CL_DEVICE_TYPE_GPU
       case CL_DEVICE_TYPE_GPU:
         return "CL_DEVICE_TYPE_GPU";
+#endif
+#ifdef CL_DEVICE_TYPE_ACCELERATOR
       case CL_DEVICE_TYPE_ACCELERATOR:
         return "CL_DEVICE_TYPE_ACCELERATOR";
+#endif
 #ifdef CL_DEVICE_TYPE_CUSTOM
       case CL_DEVICE_TYPE_CUSTOM:
         return "CL_DEVICE_TYPE_CUSTOM";
 #endif
+#ifdef CL_DEVICE_TYPE_ALL
       case CL_DEVICE_TYPE_ALL:
         return "CL_DEVICE_TYPE_ALL";
+#endif
       default:
         return "Unknown";
       }
     }
   }
 }
+
+#endif
