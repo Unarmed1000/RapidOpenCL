@@ -233,7 +233,6 @@ namespace RapidOpenCL1
       return clEnqueueWaitForEvents(m_commandQueue, uint, pEvent);
     }
 
-
     //! @note  Function: clEnqueueBarrier
     cl_int EnqueueBarrier()
     {

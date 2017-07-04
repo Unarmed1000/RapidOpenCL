@@ -81,6 +81,7 @@ namespace RapidOpenCL1
       Reset(mem);
     }
 
+#if CL_VERSION_1_2
     //! @brief Create the requested resource
     //! @note  Function: clCreateImage
     Image(const cl_context context, const cl_mem_flags memFlags, const cl_image_format& imageFormat, const cl_image_desc& imageDesc, void * pVoid)
@@ -88,6 +89,7 @@ namespace RapidOpenCL1
     {
       Reset(context, memFlags, imageFormat, imageDesc, pVoid);
     }
+#endif
 
     //! @brief Create the requested resource
     //! @note  Function: clCreateImage2D
@@ -140,6 +142,7 @@ namespace RapidOpenCL1
       m_mem = mem;
     }
 
+#if CL_VERSION_1_2
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateImage
     void Reset(const cl_context context, const cl_mem_flags memFlags, const cl_image_format& imageFormat, const cl_image_desc& imageDesc, void * pVoid)
@@ -158,6 +161,7 @@ namespace RapidOpenCL1
       // Everything is ready, so assign the members
       m_mem = mem;
     }
+#endif
 
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateImage2D
@@ -232,6 +236,15 @@ namespace RapidOpenCL1
     {
       return clGetImageInfo(m_mem, imageInfo, size, pVoid, pSize);
     }
+
+
+#if CL_VERSION_1_1
+    //! @note  Function: clSetMemObjectDestructorCallback
+    cl_int SetMemObjectDestructorCallback(FNOpenCLObjectDestructorCallback pfnNotify, void * pUserData)
+    {
+      return clSetMemObjectDestructorCallback(m_mem, pfnNotify, pUserData);
+    }
+#endif
   };
 }
 

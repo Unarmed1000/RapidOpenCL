@@ -177,6 +177,15 @@ namespace RapidOpenCL1
     {
       return clGetImageInfo(m_mem, imageInfo, size, pVoid, pSize);
     }
+
+
+#if CL_VERSION_1_1
+    //! @note  Function: clSetMemObjectDestructorCallback
+    cl_int SetMemObjectDestructorCallback(FNOpenCLObjectDestructorCallback pfnNotify, void * pUserData)
+    {
+      return clSetMemObjectDestructorCallback(m_mem, pfnNotify, pUserData);
+    }
+#endif
   };
 }
 

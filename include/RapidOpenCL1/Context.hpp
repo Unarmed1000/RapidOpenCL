@@ -82,7 +82,7 @@ namespace RapidOpenCL1
 
     //! @brief Create the requested resource
     //! @note  Function: clCreateContext
-    Context(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLNotify pfnNotify, void * pUserData)
+    Context(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLCreateCallback pfnNotify, void * pUserData)
       : Context()
     {
       Reset(pContextProperties, numDevices, pDeviceId, pfnNotify, pUserData);
@@ -90,7 +90,7 @@ namespace RapidOpenCL1
 
     //! @brief Create the requested resource
     //! @note  Function: clCreateContextFromType
-    Context(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLNotify pfnNotify, void * pUserData)
+    Context(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLCreateCallback pfnNotify, void * pUserData)
       : Context()
     {
       Reset(pContextProperties, deviceType, pfnNotify, pUserData);
@@ -133,7 +133,7 @@ namespace RapidOpenCL1
 
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateContext
-    void Reset(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLNotify pfnNotify, void * pUserData)
+    void Reset(const cl_context_properties * pContextProperties, const cl_uint numDevices, const cl_device_id * pDeviceId, FNOpenCLCreateCallback pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -152,7 +152,7 @@ namespace RapidOpenCL1
 
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateContextFromType
-    void Reset(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLNotify pfnNotify, void * pUserData)
+    void Reset(const cl_context_properties * pContextProperties, const cl_device_type deviceType, FNOpenCLCreateCallback pfnNotify, void * pUserData)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -204,6 +204,15 @@ namespace RapidOpenCL1
     {
       return clGetSupportedImageFormats(m_context, memFlags, memObjectType, uint, pImageFormat, pUint);
     }
+
+
+#if CL_VERSION_1_2
+    //! @note  Function: clLinkProgram
+    cl_program LinkProgram(const cl_uint numDevices, const cl_device_id * pDeviceList, const char * pOptions, const cl_uint numInputPrograms, const cl_program * pInputPrograms, FNOpenCLLinkProgramCallback pfnNotify, void * pUserData, cl_int * pErrorCode)
+    {
+      return clLinkProgram(m_context, numDevices, pDeviceList, pOptions, numInputPrograms, pInputPrograms, pfnNotify, pUserData, pErrorCode);
+    }
+#endif
   };
 }
 

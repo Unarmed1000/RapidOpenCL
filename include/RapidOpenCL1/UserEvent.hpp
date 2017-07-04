@@ -81,6 +81,7 @@ namespace RapidOpenCL1
       Reset(event);
     }
 
+#if CL_VERSION_1_1
     //! @brief Create the requested resource
     //! @note  Function: clCreateUserEvent
     UserEvent(const cl_context context)
@@ -88,6 +89,7 @@ namespace RapidOpenCL1
     {
       Reset(context);
     }
+#endif
 
     ~UserEvent()
     {
@@ -124,6 +126,7 @@ namespace RapidOpenCL1
       m_event = event;
     }
 
+#if CL_VERSION_1_1
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateUserEvent
     void Reset(const cl_context context)
@@ -142,6 +145,7 @@ namespace RapidOpenCL1
       // Everything is ready, so assign the members
       m_event = event;
     }
+#endif
 
     //! @brief Get the associated resource handle
     cl_event Get() const
@@ -176,12 +180,20 @@ namespace RapidOpenCL1
 
 #if CL_VERSION_1_1
     //! @note  Function: clSetUserEventStatus
-    cl_int SetUserEventStatus(const cl_int value)
+    cl_int SetUserEventStatus(const cl_int executionStatus)
     {
-      return clSetUserEventStatus(m_event, value);
+      return clSetUserEventStatus(m_event, executionStatus);
     }
 #endif
 
+
+#if CL_VERSION_1_1
+    //! @note  Function: clSetEventCallback
+    cl_int SetEventCallback(const cl_int commandExecCallbackType, FNOpenCLSetEventCallback pfnNotify, void * pUserData)
+    {
+      return clSetEventCallback(m_event, commandExecCallbackType, pfnNotify, pUserData);
+    }
+#endif
 
     //! @note  Function: clGetEventProfilingInfo
     cl_int GetEventProfilingInfo(const cl_profiling_info profilingInfo, const size_t size, void * pVoid, size_t * pSize)

@@ -96,13 +96,15 @@ namespace RapidOpenCL1
       Reset(context, numDevices, pDeviceId, lengths, ppBinaries, pBinaryStatus);
     }
 
+#if CL_VERSION_1_2
     //! @brief Create the requested resource
     //! @note  Function: clCreateProgramWithBuiltInKernels
-    Program(const cl_context context, const cl_uint uint, const cl_device_id * pDeviceId, const char * pChar)
+    Program(const cl_context context, const cl_uint numDevices, const cl_device_id * pDeviceList, const char * pszKernelNames)
       : Program()
     {
-      Reset(context, uint, pDeviceId, pChar);
+      Reset(context, numDevices, pDeviceList, pszKernelNames);
     }
+#endif
 
     ~Program()
     {
@@ -177,9 +179,10 @@ namespace RapidOpenCL1
       m_program = program;
     }
 
+#if CL_VERSION_1_2
     //! @brief Destroys any owned resources and then creates the requested one
     //! @note  Function: clCreateProgramWithBuiltInKernels
-    void Reset(const cl_context context, const cl_uint uint, const cl_device_id * pDeviceId, const char * pChar)
+    void Reset(const cl_context context, const cl_uint numDevices, const cl_device_id * pDeviceList, const char * pszKernelNames)
     {
       // We do the check here to be user friendly, if it becomes a performance issue switch it to a assert.
 
@@ -189,12 +192,13 @@ namespace RapidOpenCL1
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;
-      const cl_program program = clCreateProgramWithBuiltInKernels(context, uint, pDeviceId, pChar, &errorCode);
+      const cl_program program = clCreateProgramWithBuiltInKernels(context, numDevices, pDeviceList, pszKernelNames, &errorCode);
       CheckError(errorCode, "clCreateProgramWithBuiltInKernels", __FILE__, __LINE__);
 
       // Everything is ready, so assign the members
       m_program = program;
     }
+#endif
 
     //! @brief Get the associated resource handle
     cl_program Get() const
@@ -220,6 +224,20 @@ namespace RapidOpenCL1
       return clRetainProgram(m_program);
     }
 
+    //! @note  Function: clBuildProgram
+    cl_int BuildProgram(const cl_uint numDevices, const cl_device_id * pDeviceList, const char * pOptions, FNOpenCLBuildProgramCallback pfnNotify, void * pUserData)
+    {
+      return clBuildProgram(m_program, numDevices, pDeviceList, pOptions, pfnNotify, pUserData);
+    }
+
+
+#if CL_VERSION_1_2
+    //! @note  Function: clCompileProgram
+    cl_int CompileProgram(const cl_uint numDevices, const cl_device_id * pDeviceList, const char * pOptions, const cl_uint numInputHeaders, const cl_program * pInputHeaders, const char ** ppHeaderIncludeNames, FNOpenCLCompileProgramCallback pfnNotify, void * pUserData)
+    {
+      return clCompileProgram(m_program, numDevices, pDeviceList, pOptions, numInputHeaders, pInputHeaders, ppHeaderIncludeNames, pfnNotify, pUserData);
+    }
+#endif
 
     //! @note  Function: clGetProgramInfo
     cl_int GetProgramInfo(const cl_program_info programInfo, const size_t size, void * pVoid, size_t * pSize)
