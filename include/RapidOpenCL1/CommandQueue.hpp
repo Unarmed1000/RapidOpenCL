@@ -221,28 +221,6 @@ namespace RapidOpenCL1
     }
 #endif
 
-#ifdef _WIN32
-#pragma warning( push )
-    // Disable the warning about deprecation as its not deprecated in 1.1
-#pragma warning( disable : 4996)
-#endif
-
-    //! @note  Function: clEnqueueWaitForEvents
-    cl_int EnqueueWaitForEvents(const cl_uint uint, const cl_event * pEvent)
-    {
-      return clEnqueueWaitForEvents(m_commandQueue, uint, pEvent);
-    }
-
-    //! @note  Function: clEnqueueBarrier
-    cl_int EnqueueBarrier()
-    {
-      return clEnqueueBarrier(m_commandQueue);
-    }
-
-#ifdef _WIN32
-#pragma warning( pop )
-#endif
-
   };
 }
 
