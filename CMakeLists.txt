@@ -13,7 +13,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Project #
 ###########
 
-DESCRIPTION "Low level header only C++11 RAII wrapper classes for the OpenCL API. The RAII class design is heavily inspired by std::unique_ptr and is compatible with STL containers."
+DESCRIPTION("Low level header only C++11 RAII wrapper classes for the OpenCL API. The RAII class design is heavily inspired by std::unique_ptr and is compatible with STL containers.")
 # URL is 12
 #  HOMEPAGE_URL https://github.com/Unarmed1000/RapidOpenCL
 
