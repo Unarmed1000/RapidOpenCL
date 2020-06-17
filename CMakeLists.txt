@@ -51,7 +51,7 @@ target_include_directories(RapidOpenCL
 # Dependencies #
 ################
 
-find_package(OpenCL REQUIRED)
+find_package(OpenCL 1.2 REQUIRED)
 
 target_link_libraries(RapidOpenCL
   INTERFACE
