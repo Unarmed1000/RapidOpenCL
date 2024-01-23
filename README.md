@@ -1,6 +1,6 @@
 # RapidOpenCL
 
-Experimental low level header only C++11 RAII wrapper classes for the OpenCL API. The RAII class design is heavily inspired by std::unique_ptr and should be compatible with STL containers.
+Experimental low level header only C++14 RAII wrapper classes for the OpenCL API. The RAII class design is heavily inspired by std::unique_ptr and should be compatible with STL containers.
 
 One header/source file pair is included for 'debugging' namely DebugStrings which is entirely optional.
 
