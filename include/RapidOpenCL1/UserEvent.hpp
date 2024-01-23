@@ -4,7 +4,7 @@
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2016-2024, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -42,13 +42,15 @@ namespace RapidOpenCL1
     UserEvent& operator=(const UserEvent&) = delete;
 
     //! @brief Move assignment operator
-    UserEvent& operator=(UserEvent&& other)
+    UserEvent& operator=(UserEvent&& other) noexcept
     {
       if (this != &other)
       {
         // Free existing resources then transfer the content of other to this one and fill other with default values
         if (IsValid())
+        {
           Reset();
+        }
 
         // Claim ownership here
         m_event = other.m_event;
@@ -61,7 +63,7 @@ namespace RapidOpenCL1
 
     //! @brief Move constructor
     //! Transfer ownership from other to this
-    UserEvent(UserEvent&& other)
+    UserEvent(UserEvent&& other) noexcept
       : m_event(other.m_event)
     {
       // Remove the data from other
@@ -97,7 +99,7 @@ namespace RapidOpenCL1
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_event Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    RAPIDOPENCL_FUNC_WARN_UNUSED_RESULT cl_event Release()
     {
       const auto resource = m_event;
       m_event = nullptr;
@@ -105,10 +107,12 @@ namespace RapidOpenCL1
     }
 
     //! @brief Destroys any owned resources and resets the object to its default state.
-    void Reset()
+    void Reset() noexcept
     {
       if (! IsValid())
+      {
         return;
+      }
 
       assert(m_event != nullptr);
 
@@ -120,7 +124,9 @@ namespace RapidOpenCL1
     void Reset(const cl_event event)
     {
       if (IsValid())
+      {
         Reset();
+      }
 
 
       m_event = event;
@@ -135,7 +141,9 @@ namespace RapidOpenCL1
 
       // Free any currently allocated resource
       if (IsValid())
+      {
         Reset();
+      }
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;

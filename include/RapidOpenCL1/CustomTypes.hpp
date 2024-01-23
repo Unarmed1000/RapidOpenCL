@@ -3,7 +3,7 @@
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2016-2024, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,12 +27,12 @@
 namespace RapidOpenCL1
 {
   // Define some function pointer typedefs which OpenCL failed to do
-  typedef void (CL_CALLBACK *FNOpenCLCreateCallback)(const char *, const void *, size_t, void *);
-  typedef void (CL_CALLBACK *FNOpenCLCompileProgramCallback)(cl_program, void *);
-  typedef void (CL_CALLBACK *FNOpenCLBuildProgramCallback)(cl_program, void *);
-  typedef void (CL_CALLBACK *FNOpenCLLinkProgramCallback)(cl_program, void *);
-  typedef void (CL_CALLBACK *FNOpenCLObjectDestructorCallback)(cl_mem, void *);
-  typedef void (CL_CALLBACK *FNOpenCLSetEventCallback)(cl_event, cl_int, void *);
+  using FNOpenCLCreateCallback = void (CL_CALLBACK *)(const char *, const void *, size_t, void *);
+  using FNOpenCLCompileProgramCallback = void (CL_CALLBACK *)(cl_program, void *);
+  using FNOpenCLBuildProgramCallback = void (CL_CALLBACK *)(cl_program, void *);
+  using FNOpenCLLinkProgramCallback = void (CL_CALLBACK *)(cl_program, void *);
+  using FNOpenCLObjectDestructorCallback = void (CL_CALLBACK *)(cl_mem, void *);
+  using FNOpenCLSetEventCallback = void (CL_CALLBACK *)(cl_event, cl_int, void *);
 }
 
 #endif

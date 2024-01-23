@@ -3,7 +3,7 @@
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2016-2024, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -24,6 +24,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <CL/cl.h>
 
 namespace RapidOpenCL1
@@ -33,16 +34,35 @@ namespace RapidOpenCL1
     std::string m_fileName;
     int m_lineNumber;
   public:
-    explicit OpenCLException(const std::string& whatArg)
-      : std::runtime_error(whatArg)
-      , m_fileName()
+    explicit OpenCLException(const char*const pszWhatArg)
+      : std::runtime_error(pszWhatArg)
       , m_lineNumber(0)
     {
     }
 
-    explicit OpenCLException(const std::string& whatArg, const std::string& fileName, const int lineNumber)
+    explicit OpenCLException(const std::string& whatArg)
       : std::runtime_error(whatArg)
-      , m_fileName(fileName)
+      , m_lineNumber(0)
+    {
+    }
+
+    explicit OpenCLException(const char*const pszWhatArg, std::string fileName, const int lineNumber)
+      : std::runtime_error(pszWhatArg)
+      , m_fileName(std::move(fileName))
+      , m_lineNumber(lineNumber)
+    {
+    }
+
+    explicit OpenCLException(const std::string& whatArg, const char*const pszFileName, const int lineNumber)
+      : std::runtime_error(whatArg)
+      , m_fileName(pszFileName)
+      , m_lineNumber(lineNumber)
+    {
+    }
+
+    explicit OpenCLException(const std::string& whatArg, std::string fileName, const int lineNumber)
+      : std::runtime_error(whatArg)
+      , m_fileName(std::move(fileName))
       , m_lineNumber(lineNumber)
     {
     }
@@ -66,14 +86,26 @@ namespace RapidOpenCL1
   {
     cl_int m_errorCode;
   public:
+    explicit OpenCLErrorException(const char*const pszWhatArg, const cl_int errorCode)
+      : OpenCLException(pszWhatArg)
+      , m_errorCode(errorCode)
+    {
+    }
+
     explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode)
       : OpenCLException(whatArg)
       , m_errorCode(errorCode)
     {
     }
 
-    explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode, const std::string& fileName, const int lineNumber)
-      : OpenCLException(whatArg, fileName, lineNumber)
+    explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode, const char*const pszFileName, const int lineNumber)
+      : OpenCLException(whatArg, pszFileName, lineNumber)
+      , m_errorCode(errorCode)
+    {
+    }
+
+    explicit OpenCLErrorException(const std::string& whatArg, const cl_int errorCode, std::string fileName, const int lineNumber)
+      : OpenCLException(whatArg, std::move(fileName), lineNumber)
       , m_errorCode(errorCode)
     {
     }

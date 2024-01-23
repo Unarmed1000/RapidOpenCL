@@ -3,7 +3,7 @@
 //***************************************************************************************************************************************************
 //* BSD 3-Clause License
 //*
-//* Copyright (c) 2016, Rene Thrane
+//* Copyright (c) 2016-2024, Rene Thrane
 //* All rights reserved.
 //*
 //* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,15 @@ namespace RapidOpenCL1
     Sampler& operator=(const Sampler&) = delete;
 
     //! @brief Move assignment operator
-    Sampler& operator=(Sampler&& other)
+    Sampler& operator=(Sampler&& other) noexcept
     {
       if (this != &other)
       {
         // Free existing resources then transfer the content of other to this one and fill other with default values
         if (IsValid())
+        {
           Reset();
+        }
 
         // Claim ownership here
         m_sampler = other.m_sampler;
@@ -60,7 +62,7 @@ namespace RapidOpenCL1
 
     //! @brief Move constructor
     //! Transfer ownership from other to this
-    Sampler(Sampler&& other)
+    Sampler(Sampler&& other) noexcept
       : m_sampler(other.m_sampler)
     {
       // Remove the data from other
@@ -94,7 +96,7 @@ namespace RapidOpenCL1
     }
 
     //! @brief returns the managed handle and releases the ownership.
-    cl_sampler Release() RAPIDOPENCL_FUNC_POSTFIX_WARN_UNUSED_RESULT
+    RAPIDOPENCL_FUNC_WARN_UNUSED_RESULT cl_sampler Release()
     {
       const auto resource = m_sampler;
       m_sampler = nullptr;
@@ -102,10 +104,12 @@ namespace RapidOpenCL1
     }
 
     //! @brief Destroys any owned resources and resets the object to its default state.
-    void Reset()
+    void Reset() noexcept
     {
       if (! IsValid())
+      {
         return;
+      }
 
       assert(m_sampler != nullptr);
 
@@ -117,7 +121,9 @@ namespace RapidOpenCL1
     void Reset(const cl_sampler sampler)
     {
       if (IsValid())
+      {
         Reset();
+      }
 
 
       m_sampler = sampler;
@@ -131,7 +137,9 @@ namespace RapidOpenCL1
 
       // Free any currently allocated resource
       if (IsValid())
+      {
         Reset();
+      }
 
       // Since we want to ensure that the resource is left untouched on error we use a local variable as a intermediary
       cl_int errorCode;

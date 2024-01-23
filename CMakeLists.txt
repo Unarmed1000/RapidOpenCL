@@ -18,7 +18,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(
   RapidOpenCL
-  VERSION 1.2.0.0
+  VERSION 1.2.0.1
   DESCRIPTION "Low level header only C++11 RAII wrapper classes for the OpenCL API. The RAII class design is heavily inspired by std::unique_ptr and is compatible with STL containers."
   LANGUAGES CXX
 )
